@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>高平中学 · 教职工请销假</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        body {
+            background: #f0f4fa;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .app-container {
+            max-width: 460px;
+            width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 0 30px 50px rgba(0,20,50,0.12);
+            overflow: hidden;
+            padding: 24px 20px 30px;
+            transition: all 0.2s;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(145deg, #1e3a5f, #2b4f8e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .role-badge {
+            background: #ecf2ff;
+            color: #2e4a9a;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+            transition: 0.2s;
+            border: 1px solid #d9e2f0;
+        }
+        .role-badge:active { background: #dae4fd; }
+        .nav-tabs {
+            display: flex;
+            background: #f2f6fd;
+            border-radius: 50px;
+            padding: 5px;
+            margin-bottom: 24px;
+        }
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4f5b73;
+            border-radius: 40px;
+            transition: 0.15s;
+            cursor: pointer;
+        }
+        .nav-tab.active {
+            background: white;
+            color: #1f3a7a;
+            box-shadow: 0 8px 18px -6px rgba(40,80,200,0.2);
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 20px 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.02);
+            border: 1px solid #eef3fc;
+        }
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #13294e;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .badge {
+            background: #1f3a7a;
+            color: white;
+            border-radius: 30px;
+            padding: 4px 14px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .form-item {
+            margin-bottom: 18px;
+        }
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2f405b;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .form-control, .picker-select, textarea {
+            width: 100%;
+            background: #f6faff;
+            border: 1px solid #dee9f5;
+            border-radius: 24px;
+            padding: 15px 18px;
+            font-size: 15px;
+            transition: 0.2s;
+            appearance: none;
+        }
+        .form-control:focus, .picker-select:focus, textarea:focus {
+            border-color: #3456b1;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52,86,177,0.1);
+        }
+        .row-duo {
+            display: flex;
+            gap: 14px;
+        }
+        .row-duo .form-item { flex: 1; }
+        .btn {
+            background: #1f3a7a;
+            color: white;
+            border: none;
+            padding: 18px 24px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 17px;
+            width: 100%;
+            box-shadow: 0 14px 28px -8px rgba(31,58,122,0.4);
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .btn:active { transform: scale(0.97); background: #102a5e; }
+        .btn-outline {
+            background: white;
+            border: 1.5px solid #d7e2f0;
+            color: #1e3a6b;
+            box-shadow: none;
+        }
+        .btn-small {
+            padding: 10px 18px;
+            font-size: 14px;
+            width: auto;
+        }
+        .btn-danger {
+            background: #c62828;
+            box-shadow: 0 10px 20px -5px #c6282860;
+        }
+        .chip {
+            background: #eef3fc;
+            border-radius: 40px;
+            padding: 5px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1d3a5f;
+            display: inline-block;
+        }
+        .flex-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .mt-2 { margin-top: 10px; }
+        .mt-3 { margin-top: 16px; }
+        .text-small { font-size: 13px; color: #62748c; }
+        .location-card {
+            background: #e5f4ff;
+            border-radius: 30px;
+            padding: 16px;
+            color: #00467a;
+            font-weight: 500;
+            text-align: center;
+        }
+        .success-bg { background: #e3f7ec; color: #0d6632; }
+        .danger-bg { background: #ffe8e8; color: #b33838; }
+        .warning-bg { background: #fff3d8; color: #915e1b; }
+        .approve-item {
+            background: #f9fcff;
+            border-radius: 24px;
+            padding: 18px;
+            border-left: 6px solid #3456b1;
+            margin-bottom: 14px;
+        }
+        .stat-grid {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .stat-cell {
+            background: #f2f7ff;
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            border-radius: 24px;
+            font-weight: 700;
+            color: #1f3a7a;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .stat-cell.active {
+            background: #1f3a7a;
+            color: white;
+            border-color: #1f3a7a;
+        }
+        table {
+            width: 100%;
+            font-size: 14px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px 4px;
+            border-bottom: 1px solid #e2edfc;
+            text-align: left;
+        }
+        .teacher-item {
+            background: #f2f7ff;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .teacher-info {
+            font-weight: 600;
+        }
+        .teacher-meta {
+            font-size: 12px;
+            color: #2f5778;
+        }
+        .edit-btn {
+            color: #1f3a7a;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .role-tag {
+            background: white;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 12px;
+            border: 1px solid #abc0d9;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <!-- 头部 -->
+    <div class="header">
+        <h1>🏫 高平中学 · 教职工请销假</h1>
+        <div class="role-badge" @click="toggleRolePanel">{{ currentRoleName }}</div>
+    </div>
+    <!-- 角色切换面板 (模拟) -->
+    <div v-if="showRoleSelector" class="card" style="padding: 16px; margin-bottom: 16px;">
+        <div style="font-weight: 700; margin-bottom: 10px;">切换身份 (演示)</div>
+        <div class="flex-row" style="gap: 6px;">
+            <div v-for="r in roles" :key="r.val" class="chip" :class="{'active-role': currentRole===r.val}" @click="setRole(r.val)" style="cursor: pointer;">{{ r.name }}</div>
+        </div>
+    </div>
+
+    <!-- 主导航 -->
+    <div class="nav-tabs">
+        <div class="nav-tab" :class="{active: tab==='apply'}" @click="tab='apply'">📝 申请</div>
+        <div class="nav-tab" :class="{active: tab==='myApplies'}" @click="tab='myApplies'; loadMyApplies()">📂 我的</div>
+        <div class="nav-tab" :class="{active: tab==='approve'}" @click="tab='approve'; loadPending()">⚡ 审批</div>
+        <div class="nav-tab" :class="{active: tab==='stats'}" @click="tab='stats'; loadStats()">📊 统计</div>
+        <div class="nav-tab" :class="{active: tab==='manage'}" @click="tab='manage'">⚙️ 管理</div>
+    </div>
+
+    <!-- ========= 申请页 ========= -->
+    <div v-if="tab === 'apply'">
+        <div class="card">
+            <div class="card-title"><span class="badge">1</span> 填写请假信息</div>
+            <div class="form-item">
+                <label class="form-label">姓名</label>
+                <input class="form-control" v-model="applyForm.applicant" placeholder="例如 张明" />
+            </div>
+            <div class="form-item">
+                <label class="form-label">所在部门</label>
+                <select class="picker-select" v-model="applyForm.department">
+                    <option v-for="d in departments" :value="d">{{ d }}</option>
+                </select>
+            </div>
+            <div class="form-item">
+                <label class="form-label">请假类型</label>
+                <select class="picker-select" v-model="applyForm.type">
+                    <option>事假</option><option>病假</option><option>婚假</option><option>产假</option><option>其他</option>
+                </select>
+            </div>
+            <div class="row-duo">
+                <div class="form-item">
+                    <label class="form-label">开始日期</label>
+                    <input class="form-control" type="date" v-model="applyForm.startDate" />
+                </div>
+                <div class="form-item">
+                    <label class="form-label">预结束日期</label>
+                    <input class="form-control" type="date" v-model="applyForm.endDate" />
+                </div>
+            </div>
+            <div class="form-item">
+                <label class="form-label">请假事由</label>
+                <textarea rows="2" class="form-control" v-model="applyForm.reason" placeholder="请简要说明..."></textarea>
+            </div>
+            <!-- 病假超三天显示上传证明（非必选） -->
+            <div class="form-item" v-if="applyForm.type === '病假' && applyForm.days > 3">
+                <label class="form-label">📎 医院证明 (非必传)</label>
+                <div class="flex-row">
+                    <label class="chip" style="background:#fff1d6;">
+                        <input type="checkbox" v-model="applyForm.hasProof" style="margin-right:6px;"> 已上传证明
+                    </label>
+                    <span class="text-small">仅病假超3天需提示</span>
+                </div>
+            </div>
+            <div class="form-item">
+                <label class="form-label">工作接替人员</label>
+                <select class="picker-select" v-model="applyForm.firstApprover">
+                    <option value="">— 无 (跳过第一级) —</option>
+                    <option v-for="t in teachers.filter(t => t.role==='教师' && t.name !== applyForm.applicant)" :value="t.name">{{ t.name }} ({{ t.department }})</option>
+                </select>
+                <div class="text-small" style="margin-top:6px;">后勤等岗位若无接替，请选“无”</div>
+            </div>
+            <div class="form-item flex-row">
+                <input type="checkbox" id="isLeader" v-model="applyForm.isLeader" style="width:18px;height:18px;" />
+                <label for="isLeader" style="font-size:15px;">☑️ 行政领导请假 (直接校长审批)</label>
+            </div>
+            <!-- 动态显示流程预览 (使用动态获取的领导) -->
+            <div class="location-card" style="background:#ecf2fc; text-align:left; font-size:14px; padding:15px;">
+                <span style="font-weight:700;">📌 流程预览</span><br>
+                <span v-if="!applyForm.isLeader && applyForm.department !== '行政组'">
+                    <span v-if="applyForm.firstApprover">①接替人({{ applyForm.firstApprover }}) → </span>
+                    <span v-else>①(跳过) → </span>
+                    ②包级领导({{ getLeaderByDept(applyForm.department) }}) → 
+                    ③考勤({{ getKaoqinName() }}) 
+                    <span v-if="applyForm.days > 3"> → ④校长({{ getPrincipalName() }})</span>
+                </span>
+                <span v-else>①直接 → 校长({{ getPrincipalName() }}) 审批</span>
+            </div>
+            <button class="btn mt-3" @click="submitApply">提交申请</button>
+        </div>
+    </div>
+
+    <!-- ========= 我的申请 ========= -->
+    <div v-if="tab === 'myApplies'">
+        <div class="card">
+            <div class="card-title">📂 我发起的申请</div>
+            <div v-if="myApplies.length === 0" class="location-card" style="background:#f5f7fc;">暂无申请记录</div>
+            <div v-for="item in myApplies" :key="item.id" class="approve-item">
+                <div style="display:flex; justify-content:space-between;">
+                    <strong>{{ item.type }} · {{ item.applicant }}</strong>
+                    <span class="chip" :class="statusClass(item.status)">{{ item.status }}</span>
+                </div>
+                <div style="font-size:14px; margin:8px 0;">{{ item.startDate }} 至 {{ item.endDate }} (预{{ item.days }}天)</div>
+                <div style="font-size:13px; color:#3a5478;">事由：{{ item.reason || '—' }}</div>
+                <div class="flex-row" style="justify-content:space-between; margin-top:10px;">
+                    <span class="chip" v-if="item.hasProof">📄 证明已传</span>
+                    <span v-if="item.status === '已批准' && !item.reported">
+                        <button class="btn-small" @click="goReport(item)">📍 销假打卡</button>
+                    </span>
+                </div>
+                <div v-if="item.reported" class="chip success-bg" style="margin-top:8px;">✅ 已销假 {{ item.reportTime }} 实计 {{ item.actualDuration }}天</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= 待审批 ========= -->
+    <div v-if="tab === 'approve'">
+        <div class="card">
+            <div class="card-title">⚙️ 待审批 ({{ currentRoleName }})</div>
+            <div v-if="pendingList.length === 0" class="location-card" style="background:#f5f7fc;">暂无待审批项</div>
+            <div v-for="item in pendingList" :key="item.id" class="approve-item">
+                <div style="display:flex; justify-content:space-between;">
+                    <strong>{{ item.applicant }} · {{ item.type }}</strong>
+                    <span class="chip">{{ item.currentStep }}</span>
+                </div>
+                <div>{{ item.startDate }} ~ {{ item.endDate }} ({{ item.days }}天) | {{ item.department }}</div>
+                <div class="text-small">事由：{{ item.reason }}</div>
+                <div class="flex-row" style="justify-content:flex-end; margin-top:12px;">
+                    <button class="btn-small btn-outline" style="flex:1;" @click="handleApprove(item, true)">✓ 同意</button>
+                    <button class="btn-small btn-outline" style="flex:1;" @click="handleApprove(item, false)">✗ 拒绝</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= 统计报表 ========= -->
+    <div v-if="tab === 'stats'">
+        <div class="card">
+            <div class="card-title">📊 汇总报表</div>
+            <div class="stat-grid">
+                <div class="stat-cell" :class="{active:statRange==='week'}" @click="statRange='week'">周</div>
+                <div class="stat-cell" :class="{active:statRange==='month'}" @click="statRange='month'">月</div>
+                <div class="stat-cell" :class="{active:statRange==='semester'}" @click="statRange='semester'">学期</div>
+                <div class="stat-cell" :class="{active:statRange==='year'}" @click="statRange='year'">学年</div>
+            </div>
+            <div style="max-height:280px; overflow-y:auto;">
+                <table>
+                    <thead><tr><th>姓名</th><th>部门</th><th>天数</th><th>状态</th></tr></thead>
+                    <tbody>
+                        <tr v-for="item in filteredStats" :key="item.id">
+                            <td>{{ item.applicant }}</td>
+                            <td>{{ item.department }}</td>
+                            <td>{{ item.actualDuration || item.days }}</td>
+                            <td>{{ item.status }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex-row mt-3">
+                <button class="btn-small btn-outline" style="flex:1;" @click="exportExcel">📎 导出 Excel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========= 管理后台 (动态调整角色/分组) ========= -->
+    <div v-if="tab === 'manage'">
+        <div class="card">
+            <div class="card-title">⚙️ 教师与角色管理</div>
+            <div class="form-item">
+                <label class="form-label">新增/编辑教师</label>
+                <input class="form-control" placeholder="姓名" v-model="editTeacher.name" />
+                <select class="picker-select mt-2" v-model="editTeacher.department">
+                    <option v-for="d in departments" :value="d">{{ d }}</option>
+                </select>
+                <select class="picker-select mt-2" v-model="editTeacher.role">
+                    <option value="教师">教师</option>
+                    <option value="包级领导">包级领导</option>
+                    <option value="考勤负责人">考勤负责人</option>
+                    <option value="校长">校长</option>
+                    <option value="班子成员">班子成员</option>
+                </select>
+                <div class="flex-row mt-2">
+                    <button class="btn-small" @click="addTeacher">➕ 添加</button>
+                    <button class="btn-small btn-outline" @click="cancelEdit">取消</button>
+                </div>
+            </div>
+            <div class="form-item">
+                <label class="form-label">当前教师列表 (点击可编辑)</label>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <div v-for="(t, idx) in teachers" :key="idx" class="teacher-item">
+                        <div>
+                            <span class="teacher-info">{{ t.name }}</span>
+                            <span class="teacher-meta"> {{ t.department }} · <span class="role-tag">{{ t.role }}</span></span>
+                        </div>
+                        <div>
+                            <span class="edit-btn" @click="editExistingTeacher(idx)">✏️</span>
+                            <span class="edit-btn" style="margin-left: 10px; color:#c0392b;" @click="deleteTeacher(idx)">🗑️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-small">* 角色改变后，审批流程将自动使用最新配置</div>
+        </div>
+        <!-- 部门管理（简版） -->
+        <div class="card">
+            <div class="card-title">📂 部门管理</div>
+            <div class="flex-row">
+                <input class="form-control" style="flex:1;" placeholder="新部门名称" v-model="newDept" />
+                <button class="btn-small" @click="addDepartment">添加部门</button>
+            </div>
+            <div class="flex-row mt-2" style="gap:6px;">
+                <span v-for="d in departments" class="chip">{{ d }} <span style="cursor:pointer; margin-left:5px;" @click="removeDepartment(d)">✕</span></span>
+            </div>
+            <div class="text-small mt-2">注意：删除部门前请确保没有教师属于该部门</div>
+        </div>
+    </div>
+
+    <!-- ========= 销假打卡 ========= -->
+    <div v-if="tab === 'report' && reportTarget" class="card">
+        <div class="card-title">📍 返校销假 · 打卡</div>
+        <div class="location-card" v-if="!locationChecked">
+            <span>定位检测中…</span>
+        </div>
+        <div v-if="locationChecked" class="location-card" :class="inSchoolRange ? 'success-bg' : 'danger-bg'">
+            {{ locationMessage }}
+        </div>
+        <div style="padding:14px 0;">
+            <div><strong>请假人：</strong>{{ reportTarget.applicant }}</div>
+            <div><strong>起始日期：</strong>{{ reportTarget.startDate }} 07:00</div>
+            <div><strong>当前时间：</strong>{{ currentReportTime }}</div>
+            <div v-if="inSchoolRange" class="mt-2"><strong>预估节课：</strong>{{ calcLessonEstimate }} 节 (约 {{ calcDayEstimate }} 天)</div>
+        </div>
+        <button class="btn" :disabled="!inSchoolRange" @click="submitReport" v-if="!reportTarget.reported">
+            {{ inSchoolRange ? '✅ 确认销假' : '⛔ 不在学校1000米内' }}
+        </button>
+        <div v-if="reportTarget.reported" class="chip success-bg">已于 {{ reportTarget.reportTime }} 销假，实际 {{ reportTarget.actualDuration }}天</div>
+    </div>
+
+    <!-- 抄送行 (动态获取班子成员) -->
+    <div class="text-small" style="text-align:center; margin-top:12px; color:#7086a8;">
+        审批通过后抄送：<span v-for="(m,idx) in members" :key="idx">{{ m }}<span v-if="idx<members.length-1">、</span></span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    (function(){
+        // 存储 keys
+        const TEACHERS_KEY = 'gpteachers_dynamic';
+        const APPLIES_KEY = 'gpapplies_dynamic';
+        const DEPARTMENTS_KEY = 'gpdepartments_dynamic';
+
+        // 默认部门
+        const defaultDepartments = ['七年级', '八年级', '九年级', '教辅后勤', '行政组'];
+
+        // 默认教师 (包含您提供的班子成员)
+        const defaultTeachers = [
+            { name: '张明', department: '七年级', role: '教师' },
+            { name: '李芳', department: '八年级', role: '教师' },
+            { name: '王强', department: '九年级', role: '教师' },
+            { name: '赵后勤', department: '教辅后勤', role: '教师' },
+            { name: '乔海军', department: '七年级', role: '考勤负责人' }, // 考勤负责人
+            { name: '丁宏伟', department: '八年级', role: '包级领导' },
+            { name: '王宏', department: '九年级', role: '包级领导' },
+            { name: '崔天文', department: '教辅后勤', role: '包级领导' },
+            { name: '高俊奇', department: '行政组', role: '校长' },
+            { name: '梁建军', department: '行政组', role: '班子成员' },
+            { name: '刘保荣', department: '行政组', role: '班子成员' },
+            { name: '王永杰', department: '行政组', role: '班子成员' },
+        ];
+
+        // 初始化存储
+        function initTeachers() {
+            let stored = localStorage.getItem(TEACHERS_KEY);
+            if (stored) return JSON.parse(stored);
+            localStorage.setItem(TEACHERS_KEY, JSON.stringify(defaultTeachers));
+            return defaultTeachers;
+        }
+        function initDepartments() {
+            let stored = localStorage.getItem(DEPARTMENTS_KEY);
+            if (stored) return JSON.parse(stored);
+            localStorage.setItem(DEPARTMENTS_KEY, JSON.stringify(defaultDepartments));
+            return defaultDepartments;
+        }
+
+        // 工具函数：日期差
+        function dateDiffDays(start, end) {
+            if (!start || !end) return 0;
+            const s = new Date(start), e = new Date(end);
+            const diff = (e - s) / (1000*3600*24) + 1;
+            return diff > 0 ? Math.ceil(diff) : 1;
+        }
+
+        // 销假计算实际天数 (根据开始日期与销假时间，以半天为单位)
+        function calculateActualDays(startDate, reportDateTime) {
+            let start = new Date(startDate + 'T07:00:00');
+            let end = new Date(reportDateTime);
+            if (end < start) return 0.5;
+            let totalEffectiveHours = 0;
+            let current = new Date(start);
+            while (current < end) {
+                let nextDay = new Date(current);
+                nextDay.setDate(current.getDate() + 1);
+                nextDay.setHours(7,0,0,0);
+                let segmentEnd = (nextDay < end) ? nextDay : end;
+                let dayStart = new Date(current);
+                dayStart.setHours(7,0,0,0);
+                let dayEnd = new Date(current);
+                dayEnd.setHours(21,0,0,0);
+                let segStart = (current > dayStart) ? current : dayStart;
+                let segEnd = (segmentEnd < dayEnd) ? segmentEnd : dayEnd;
+                if (segEnd > segStart) {
+                    totalEffectiveHours += (segEnd - segStart) / (1000*3600);
+                }
+                current = nextDay;
+            }
+            let days = totalEffectiveHours / 12;
+            days = Math.round(days * 2) / 2;
+            return days < 0.5 ? 0.5 : days;
+        }
+
+        new Vue({
+            el: '#app',
+            data: {
+                tab: 'apply',
+                showRoleSelector: false,
+                currentRole: 'zhang', // 模拟登录身份
+                roles: [
+                    { val: 'zhang', name: '张明(教师)' },
+                    { val: 'qiao', name: '乔海军(考勤)' },
+                    { val: 'ding', name: '丁宏伟(八年级)' },
+                    { val: 'wanghong', name: '王宏(九年级)' },
+                    { val: 'cui', name: '崔天文(后勤)' },
+                    { val: 'gao', name: '高俊奇(校长)' },
+                    { val: 'admin', name: '管理员' },
+                ],
+                teachers: [],
+                departments: [],
+                applyForm: {
+                    applicant: '张明',
+                    department: '七年级',
+                    type: '事假',
+                    startDate: new Date().toISOString().slice(0,10),
+                    endDate: new Date(Date.now()+2*86400000).toISOString().slice(0,10),
+                    reason: '',
+                    hasProof: false,
+                    firstApprover: '',
+                    isLeader: false,
+                },
+                myApplies: [],
+                pendingList: [],
+                reportTarget: null,
+                locationChecked: false,
+                inSchoolRange: false,
+                locationMessage: '',
+                currentReportTime: '',
+                schoolLng: 107.53,
+                schoolLat: 35.29,
+                radius: 1000,
+                statRange: 'month',
+                // 管理相关
+                editTeacher: { name: '', department: '七年级', role: '教师' },
+                editingIndex: -1,
+                newDept: '',
+            },
+            computed: {
+                currentRoleName() {
+                    const r = this.roles.find(r => r.val === this.currentRole);
+                    return r ? r.name : '切换';
+                },
+                currentTime() {
+                    return new Date().toLocaleString('zh-CN', { hour12: false }).slice(0,16);
+                },
+                filteredStats() {
+                    let apps = JSON.parse(localStorage.getItem(APPLIES_KEY)) || [];
+                    const now = new Date();
+                    let start = new Date();
+                    if (this.statRange === 'week') start.setDate(now.getDate() - 7);
+                    else if (this.statRange === 'month') start.setMonth(now.getMonth() - 1);
+                    else if (this.statRange === 'semester') start.setMonth(now.getMonth() - 5);
+                    else if (this.statRange === 'year') start.setFullYear(now.getFullYear() - 1);
+                    return apps.filter(a => new Date(a.createTime) >= start).sort((a,b)=>b.id.localeCompare(a.id));
+                },
+                calcLessonEstimate() {
+                    if (!this.reportTarget) return 0;
+                    return Math.ceil(calculateActualDays(this.reportTarget.startDate, this.currentReportTime) * 12);
+                },
+                calcDayEstimate() {
+                    if (!this.reportTarget) return 0;
+                    return calculateActualDays(this.reportTarget.startDate, this.currentReportTime);
+                },
+                // 动态获取班子成员列表
+                members() {
+                    return this.teachers.filter(t => t.role === '班子成员').map(t => t.name);
+                }
+            },
+            watch: {
+                currentRole() {
+                    if (this.tab === 'approve') this.loadPending();
+                    if (this.tab === 'myApplies') this.loadMyApplies();
+                }
+            },
+            methods: {
+                toggleRolePanel() { this.showRoleSelector = !this.showRoleSelector; },
+                setRole(r) { this.currentRole = r; this.showRoleSelector = false; },
+                // 动态获取领导
+                getLeaderByDept(dept) {
+                    // 查找该部门下角色为“包级领导”的教师，取第一个
+                    let leader = this.teachers.find(t => t.department === dept && t.role === '包级领导');
+                    return leader ? leader.name : '未配置包级领导';
+                },
+                getKaoqinName() {
+                    let kq = this.teachers.find(t => t.role === '考勤负责人');
+                    return kq ? kq.name : '未配置考勤负责人';
+                },
+                getPrincipalName() {
+                    principal = this.teachers.find(t => t.role === '校长');
+                    return principal ? principal.name : '未配置校长';
+                },
+                statusClass(status) {
+                    if (status.includes('批准')) return 'success-bg';
+                    if (status.includes('拒绝')) return 'danger-bg';
+                    return 'warning-bg';
+                },
+                loadMyApplies() {
+                    let all = JSON.parse(localStorage.getItem(APPLIES_KEY)) || [];
+                    let name = '';
+                    if (this.currentRole === 'zhang') name = '张明';
+                    else if (this.currentRole === 'qiao') name = '乔海军';
+                    else if (this.currentRole === 'ding') name = '丁宏伟';
+                    else if (this.currentRole === 'wanghong') name = '王宏';
+                    else if (this.currentRole === 'cui') name = '崔天文';
+                    else if (this.currentRole === 'gao') name = '高俊奇';
+                    else name = '张明';
+                    this.myApplies = all.filter(a => a.applicant === name).sort((a,b)=>b.id.localeCompare(a.id));
+                },
+                loadPending() {
+                    let all = JSON.parse(localStorage.getItem(APPLIES_KEY)) || [];
+                    let roleName = this.mapRoleToName(this.currentRole);
+                    this.pendingList = all.filter(item => {
+                        if (item.status === '待一级审批' && item.firstApprover === roleName) return true;
+                        if (item.status === '待二级审批' && item.secondApprover === roleName) return true;
+                        if (item.status === '待三级审批' && item.thirdApprover === roleName) return true;
+                        if (item.status === '待校长审批' && item.principal === roleName) return true;
+                        return false;
+                    });
+                },
+                mapRoleToName(role) {
+                    if (role === 'qiao') return '乔海军';
+                    if (role === 'ding') return '丁宏伟';
+                    if (role === 'wanghong') return '王宏';
+                    if (role === 'cui') return '崔天文';
+                    if (role === 'gao') return '高俊奇';
+                    return '';
+                },
+                submitApply() {
+                    let f = this.applyForm;
+                    if (!f.applicant || !f.department || !f.startDate || !f.endDate) {
+                        alert('请填写完整'); return;
+                    }
+                    let days = dateDiffDays(f.startDate, f.endDate);
+                    // 动态获取审批人姓名
+                    let secondName = this.getLeaderByDept(f.department);
+                    let thirdName = this.getKaoqinName();
+                    let principalName = this.getPrincipalName();
+
+                    let needPrincipal = (days > 3) || (f.department === '行政组') || f.isLeader;
+
+                    let status = '';
+                    let currentStep = '';
+                    if (f.isLeader || f.department === '行政组') {
+                        status = '待校长审批';
+                        currentStep = '校长审批';
+                    } else {
+                        if (f.firstApprover) {
+                            status = '待一级审批';
+                            currentStep = '一级(接替人)';
+                        } else {
+                            status = '待二级审批';
+                            currentStep = '二级(包级)';
+                        }
+                    }
+
+                    let newApp = {
+                        id: 'app_' + Date.now() + Math.random().toString(36).substr(2,6),
+                        applicant: f.applicant,
+                        department: f.department,
+                        type: f.type,
+                        startDate: f.startDate,
+                        endDate: f.endDate,
+                        days: days,
+                        reason: f.reason,
+                        hasProof: f.hasProof,
+                        firstApprover: f.firstApprover || '',
+                        secondApprover: secondName,
+                        thirdApprover: thirdName,
+                        principal: principalName,
+                        isLeader: f.isLeader,
+                        status: status,
+                        currentStep: currentStep,
+                        createTime: this.currentTime,
+                        reported: false,
+                        reportTime: null,
+                        actualDuration: null,
+                    };
+                    let apps = JSON.parse(localStorage.getItem(APPLIES_KEY)) || [];
+                    apps.push(newApp);
+                    localStorage.setItem(APPLIES_KEY, JSON.stringify(apps));
+                    alert('申请已提交，微信提醒已触发');
+                    this.tab = 'myApplies';
+                    this.loadMyApplies();
+                },
+                handleApprove(item, agree) {
+                    if (!agree) {
+                        item.status = '已拒绝';
+                        this.updateApp(item);
+                        this.loadPending();
+                        alert('已拒绝');
+                        return;
+                    }
+                    let days = item.days;
+                    let needPrincipal = (days > 3) || (item.department === '行政组') || item.isLeader;
+                    let nextStatus = '', nextStep = '';
+
+                    if (item.status === '待一级审批') {
+                        nextStatus = '待二级审批';
+                        nextStep = '二级(包级)';
+                    } else if (item.status === '待二级审批') {
+                        nextStatus = '待三级审批';
+                        nextStep = '三级(考勤)';
+                    } else if (item.status === '待三级审批') {
+                        if (needPrincipal) {
+                            nextStatus = '待校长审批';
+                            nextStep = '校长审批';
+                        } else {
+                            nextStatus = '已批准';
+                            nextStep = '终审完成';
+                            this.copyToAdmin(item);
+                        }
+                    } else if (item.status === '待校长审批') {
+                        nextStatus = '已批准';
+                        nextStep = '校长批准';
+                        this.copyToAdmin(item);
+                    }
+
+                    item.status = nextStatus || '已批准';
+                    item.currentStep = nextStep || '终审';
+                    this.updateApp(item);
+                    this.loadPending();
+                    alert('审批同意，下一级已通知');
+                },
+                copyToAdmin(item) {
+                    console.log('抄送班子成员:', this.members, item.applicant);
+                },
+                updateApp(updated) {
+                    let apps = JSON.parse(localStorage.getItem(APPLIES_KEY)) || [];
+                    let idx = apps.findIndex(a => a.id === updated.id);
+                    if (idx !== -1) {
+                        apps[idx] = updated;
+                        localStorage.setItem(APPLIES_KEY, JSON.stringify(apps));
+                    }
+                },
+                goReport(item) {
+                    this.reportTarget = JSON.parse(JSON.stringify(item));
+                    this.tab = 'report';
+                    this.locationChecked = false;
+                    this.checkLocation();
+                },
+                checkLocation() {
+                    setTimeout(() => {
+                        let mockDist = Math.random() * 2000;
+                        this.inSchoolRange = mockDist <= this.radius;
+                        this.locationMessage = this.inSchoolRange ? `✅ 距离学校 ${mockDist.toFixed(0)} 米 (可销假)` : `❌ 距离学校 ${mockDist.toFixed(0)} 米，超出范围`;
+                        this.locationChecked = true;
+                        this.currentReportTime = new Date().toLocaleString('zh-CN', { hour12: false });
+                    }, 1200);
+                },
+                submitReport() {
+                    if (!this.inSchoolRange) { alert('不在学校范围'); return; }
+                    let actual = calculateActualDays(this.reportTarget.startDate, this.currentReportTime);
+                    this.reportTarget.reported = true;
+                    this.reportTarget.reportTime = this.currentReportTime;
+                    this.reportTarget.actualDuration = actual;
+
+                    let apps = JSON.parse(localStorage.getItem(APPLIES_KEY)) || [];
+                    let idx = apps.findIndex(a => a.id === this.reportTarget.id);
+                    if (idx !== -1) {
+                        apps[idx].reported = true;
+                        apps[idx].reportTime = this.currentReportTime;
+                        apps[idx].actualDuration = actual;
+                        localStorage.setItem(APPLIES_KEY, JSON.stringify(apps));
+                    }
+                    alert(`销假成功！实际请假 ${actual} 天`);
+                    this.tab = 'myApplies';
+                    this.loadMyApplies();
+                },
+                loadStats() {},
+                exportExcel() {
+                    let data = this.filteredStats;
+                    if (!data.length) { alert('暂无数据'); return; }
+                    let csv = "姓名,部门,请假类型,开始,结束,预天数,实际天数,状态\n";
+                    data.forEach(d => {
+                        csv += `${d.applicant},${d.department},${d.type},${d.startDate},${d.endDate},${d.days},${d.actualDuration||''},${d.status}\n`;
+                    });
+                    const blob = new Blob(["\uFEFF"+csv], {type: 'text/csv;charset=utf-8;'});
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `高平中学请假_${this.statRange}.csv`;
+                    link.click();
+                },
+                // 管理方法
+                addTeacher() {
+                    if (!this.editTeacher.name) return;
+                    if (this.editingIndex >= 0) {
+                        // 编辑
+                        this.teachers[this.editingIndex] = { ...this.editTeacher };
+                    } else {
+                        this.teachers.push({ ...this.editTeacher });
+                    }
+                    localStorage.setItem(TEACHERS_KEY, JSON.stringify(this.teachers));
+                    this.cancelEdit();
+                },
+                cancelEdit() {
+                    this.editTeacher = { name: '', department: '七年级', role: '教师' };
+                    this.editingIndex = -1;
+                },
+                editExistingTeacher(index) {
+                    this.editTeacher = { ...this.teachers[index] };
+                    this.editingIndex = index;
+                },
+                deleteTeacher(index) {
+                    if (confirm('确定删除该教师？')) {
+                        this.teachers.splice(index, 1);
+                        localStorage.setItem(TEACHERS_KEY, JSON.stringify(this.teachers));
+                    }
+                },
+                addDepartment() {
+                    if (this.newDept && !this.departments.includes(this.newDept)) {
+                        this.departments.push(this.newDept);
+                        localStorage.setItem(DEPARTMENTS_KEY, JSON.stringify(this.departments));
+                        this.newDept = '';
+                    }
+                },
+                removeDepartment(dept) {
+                    if (this.teachers.some(t => t.department === dept)) {
+                        alert('该部门下还有教师，无法删除');
+                        return;
+                    }
+                    if (confirm(`删除部门 ${dept} ？`)) {
+                        this.departments = this.departments.filter(d => d !== dept);
+                        localStorage.setItem(DEPARTMENTS_KEY, JSON.stringify(this.departments));
+                    }
+                }
+            },
+            mounted() {
+                this.teachers = initTeachers();
+                this.departments = initDepartments();
+                if (!localStorage.getItem(APPLIES_KEY)) {
+                    localStorage.setItem(APPLIES_KEY, JSON.stringify([]));
+                }
+                this.loadMyApplies();
+            }
+        });
+    })();
+</script>
+<style>
+    .active-role { background: #1f3a7a !important; color: white !important; }
+    .success-bg { background: #dff0d8; color: #2b6e3b; }
+    .danger-bg { background: #ffe3e3; color: #b33; }
+    .warning-bg { background: #fff0cf; color: #8e6113; }
+    button:disabled { opacity: 0.5; background: #a3b6d4; }
+    .stat-cell.active { background: #1f3a7a; color: white; border-color: #1f3a7a; }
+    .teacher-item .edit-btn { cursor: pointer; font-size: 16px; }
+</style>
+</body>
+</html>
